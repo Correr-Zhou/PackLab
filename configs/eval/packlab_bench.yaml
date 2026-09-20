@@ -1,0 +1,76 @@
+defaults:
+  - vllm_runtime
+  - _self_
+
+model:
+  path: checkpoints/PackLab-VLM-9B
+
+data:
+  test_path:
+    - benchmarks/PackLab-Bench/easy/test.parquet
+    - benchmarks/PackLab-Bench/medium/test.parquet
+    - benchmarks/PackLab-Bench/hard/test.parquet
+  max_cases: null
+  max_cases_per_difficulty: null
+  shuffle: false
+  seed: 42
+
+client:
+  concurrency: 1
+  timeout_s: 120
+  max_retries: 2
+  retry_sleep_s: 1.0
+  fail_fast: false
+
+generation:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 512
+
+diagnostics:
+  image_mode: normal
+  history_mode: full
+  log_prompt_payload: true
+
+prompt_view:
+  history_mode: full
+  height_map_mode: image
+
+env:
+  config_path: configs/phy_env/env.yaml
+
+prompt:
+  config_path: configs/prompts/packing_sft.yaml
+
+scoring:
+  config_path: configs/phy_env/scoring/packing_score.yaml
+
+placement:
+  mode: relaxed_physical
+  forced_outside_seed: 42
+
+episode_control:
+  max_invalid_actions: null
+  max_turns_buffer: 1
+  hard_max_turns: 80
+
+action_adjustment:
+  xy_bounds:
+    enabled: false
+    mode: random
+    seed: 42
+  height:
+    enabled: false
+    mode: random_feasible
+    max_attempts: 32
+    seed: 42
+
+visualization:
+  mode: none
+  first_n_per_difficulty: 2
+  save_video: false
+  save_height_map: true
+
+output:
+  root_dir: outputs/eval
+  run_name: null

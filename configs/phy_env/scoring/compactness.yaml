@@ -1,0 +1,9 @@
+type: weighted
+
+granularity: final
+
+infeasible_penalty: 0.0
+
+components:
+  - type: bbox_compactness
+    weight: 1.0

@@ -1,0 +1,23 @@
+server:
+  host: 127.0.0.1
+  port: 8000
+  startup_timeout_s: 600
+  request_timeout_s: 120
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.85
+  max_model_len: 65536
+  dtype: bfloat16
+  trust_remote_code: true
+  extra_args: []
+
+client:
+  api_key: EMPTY
+  concurrency: 8
+  max_retries: 3
+  retry_sleep_s: 2
+  fail_fast: false
+
+generation:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 256

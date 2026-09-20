@@ -1,0 +1,35 @@
+model:
+  base_path: Qwen/Qwen3.5-9B
+  trust_remote_code: true
+
+training_backend: fsdp
+
+cluster:
+  nnodes: 1
+  nproc_per_node: 8
+  ray_num_cpus: 32
+  ray_address: null
+
+parallel:
+  gen_tp: 4
+  tp: 2
+  pp: 2
+  cp: 2
+
+rollout_engine:
+  name: vllm
+  gpu_memory_utilization: 0.7
+  disable_mm_preprocessor_cache: null
+  gdn_prefill_backend: triton
+
+fsdp:
+  param_offload: true
+  optimizer_offload: true
+  use_torch_compile: false
+  model_dtype: bf16
+
+megatron:
+  use_mbridge: true
+  param_offload: true
+  optimizer_offload: true
+  grad_offload: true

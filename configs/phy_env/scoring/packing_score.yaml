@@ -1,0 +1,21 @@
+type: packing_score
+granularity: final
+
+quality:
+  enable: true
+  use_center: xyz
+  inside_volume_ratio_weight: 0.7
+  inside_container_compactness_weight: 0.3
+
+format:
+  enable: true
+  weight: 1.0
+  aggregate: mean
+  strict_json_score: 0.0
+  extra_text_score: -0.02
+  parse_fail_score: -0.10
+
+failure:
+  enable: true
+  xyz_out_of_bounds_score: -0.10
+  exceed_height_score: -0.10

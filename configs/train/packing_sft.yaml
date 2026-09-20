@@ -1,0 +1,46 @@
+task_type: sft
+
+defaults:
+  - qwen3_5_9b_runtime
+  - _self_
+
+data:
+  train_dir: data/PackData-20K/train
+  train_glob: "**/*.parquet"
+  val_file: null
+  data_root: data/PackData-20K
+  messages_key: messages
+  image_key: images
+  custom_cls:
+    path: train/sft_dataset.py
+    name: PackingSequenceSFTDataset
+  max_length: 24576
+  max_token_len_per_gpu: 24576
+  truncation: error
+  use_dynamic_bsz: false
+  num_workers: 0
+
+optimization:
+  lr: 1.0e-5
+  train_batch_size: 8
+  micro_batch_size_per_gpu: 1
+  epochs: 10
+
+model_runtime:
+  use_remove_padding: false
+  enable_gradient_checkpointing: true
+  enable_activation_offload: false
+  override_config:
+    attn_implementation: flash_attention_2
+
+fsdp:
+  model_dtype: bf16
+  use_torch_compile: false
+  param_offload: true
+  optimizer_offload: true
+
+checkpoint:
+  output_dir: outputs/checkpoints/packlab_vlm_9b_sft
+
+trainer:
+  max_ckpt_to_keep: 2

@@ -1,0 +1,4 @@
+episode_control:
+  max_invalid_actions: 3
+  max_turns_buffer: 3
+  hard_max_turns: 40

@@ -1,0 +1,46 @@
+mode: eval
+output_dir: benchmarks/PackLab-Bench
+env_config_path: configs/phy_env/env.yaml
+prompt_template_id: packing_sft
+
+generation:
+  per_difficulty:
+    easy:
+      num_episodes: 20
+      seed: 610000
+      difficulties:
+        easy: 1.0
+      buffer_sizes: [3]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+    medium:
+      num_episodes: 20
+      seed: 620000
+      difficulties:
+        medium: 1.0
+      buffer_sizes: [5]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+    hard:
+      num_episodes: 20
+      seed: 630000
+      difficulties:
+        hard: 1.0
+      buffer_sizes: [10]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor

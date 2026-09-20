@@ -1,0 +1,96 @@
+mode: sft
+output_dir: data/PackData-20K
+env_config_path: configs/phy_env/env.yaml
+prompt_config_path: configs/prompts/packing_sft.yaml
+prompt_template_id: packing_sft
+shard_index: 0
+num_shards: 100
+split: train
+
+prompt_view:
+  history_mode: full
+  height_map_mode: image
+
+generation:
+  per_difficulty:
+    easy:
+      num_episodes: 9000
+      seed: 310000
+      difficulties:
+        easy: 1.0
+      buffer_sizes: [3]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+    medium:
+      num_episodes: 7000
+      seed: 320000
+      difficulties:
+        medium: 1.0
+      buffer_sizes: [5]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+    hard:
+      num_episodes: 4000
+      seed: 330000
+      difficulties:
+        hard: 1.0
+      buffer_sizes: [10]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+
+val_generation:
+  per_difficulty:
+    easy:
+      num_episodes: 10
+      seed: 340000
+      difficulties:
+        easy: 1.0
+      buffer_sizes: [3]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+    medium:
+      num_episodes: 10
+      seed: 350000
+      difficulties:
+        medium: 1.0
+      buffer_sizes: [5]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor
+    hard:
+      num_episodes: 10
+      seed: 360000
+      difficulties:
+        hard: 1.0
+      buffer_sizes: [10]
+      first_anchor_distribution:
+        top_left: 0.225
+        top_right: 0.225
+        bottom_left: 0.225
+        bottom_right: 0.225
+        edge_or_interior: 0.10
+      order_strategy: layer_random_anchor

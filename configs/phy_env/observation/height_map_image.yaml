@@ -1,0 +1,5 @@
+type: height_map_image
+
+output_size: [224, 224]
+
+color_mode: blue_to_red

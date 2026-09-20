@@ -1,0 +1,15 @@
+type: llm_json
+
+pose_mode: z_rotation_2
+
+strip_think_tags: true
+
+# Expected JSON action schema.
+# object_id: visible buffer object index, 0-based.
+# x, y: discrete container grid coordinates.
+# rotation: 0 keeps the footprint, 1 rotates 90 degrees around z.
+expected_schema:
+  object_id: int
+  x: int
+  y: int
+  rotation: int
