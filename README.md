@@ -16,9 +16,11 @@ Yun-Hui Liu<sup>3</sup>, Chi-Wing Fu<sup>1,†</sup>, and Pheng-Ann Heng<sup>1,�
 
 <br>
 
+
 <div align="center">
 <sup>*</sup>Equal contribution, <sup>†</sup>Corresponding authors
 </div>
+
 
 <br>
 
@@ -37,7 +39,7 @@ PackLab is a comprehensive framework for developing, training, and evaluating mu
   <img width="1080" alt="PackLab Overview" src="assets/packlab_overview.png">
 </div>
 
-https://raw.githubusercontent.com/Correr-Zhou/PackLab/main/assets/PackLab_intro_video.mp4
+https://github.com/user-attachments/assets/ddbd31e3-3c45-4baf-aa21-e00f87de473d
 
 ## 🛠️ Environment Setup
 
