@@ -37,6 +37,10 @@ PackLab is a comprehensive framework for developing, training, and evaluating mu
   <img width="1080" alt="PackLab Overview" src="assets/packlab_overview.png">
 </div>
 
+<div align="center">
+  <video width="1080" src="assets/PackLab_intro_video.mp4" controls></video>
+</div>
+
 ## 🛠️ Environment Setup
 
 Create a clean Python environment from the cloned repository root and install the package dependencies:
