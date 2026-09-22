@@ -37,9 +37,7 @@ PackLab is a comprehensive framework for developing, training, and evaluating mu
   <img width="1080" alt="PackLab Overview" src="assets/packlab_overview.png">
 </div>
 
-<p align="center">
-  <a href="assets/PackLab_intro_video.mp4"><strong>Watch the PackLab overview video</strong></a>
-</p>
+https://raw.githubusercontent.com/Correr-Zhou/PackLab/main/assets/PackLab_intro_video.mp4
 
 ## 🛠️ Environment Setup
 
