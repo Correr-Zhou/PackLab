@@ -7,6 +7,7 @@ import pytest
 from train.sft_dataset import (
     MultiTurnSFTDataset,
     PackingSequenceSFTDataset,
+    infer_data_root_for_parquet,
     resolve_enable_thinking_values,
     resolve_relative_images,
 )
@@ -128,6 +129,63 @@ def test_packing_sequence_sft_dataset_infers_packing_root(tmp_path):
     dataframe = dataset._read_parquet_with_resolved_images(parquet)
 
     assert dataframe.iloc[0]["images"] == [{"image": str(image)}]
+
+
+@requires_verl_dataset
+def test_packing_sequence_sft_dataset_infers_builder_layout_root(tmp_path):
+    # The PackLab builder writes parquet under <out>/<split>/<difficulty>/<shard_...>/
+    # while relative image paths are anchored at <out>/images/... . The inferred
+    # root must be <out>, not the shard's immediate parent.
+    root = tmp_path / "sft_out"
+    image = root / "images" / "train" / "easy" / "shard_00000_of_00002" / "case_step_000.png"
+    image.parent.mkdir(parents=True)
+    image.write_bytes(b"fake")
+    parquet = root / "train" / "easy" / "shard_00000_of_00002" / "train.parquet"
+    parquet.parent.mkdir(parents=True)
+    pd.DataFrame(
+        [
+            {
+                "messages": [{"role": "user", "content": "<image>\nstate"}],
+                "images": [{"image": "images/train/easy/shard_00000_of_00002/case_step_000.png"}],
+            }
+        ]
+    ).to_parquet(parquet)
+
+    dataset = object.__new__(PackingSequenceSFTDataset)
+    dataset.parquet_files = [str(parquet)]
+    dataset.image_key = "images"
+    dataset.config = OmegaConf.create({})
+
+    dataframe = dataset._read_parquet_with_resolved_images(parquet)
+
+    assert dataframe.iloc[0]["images"] == [{"image": str(image)}]
+
+
+def test_infer_data_root_for_parquet_builder_layout(tmp_path):
+    # Without verl, the module-level inference helper must still resolve the
+    # builder layout (parquet under <out>/<split>/<difficulty>/<shard_...>,
+    # images under <out>/images/...) to <out>.
+    root = tmp_path / "sft_out"
+    image = root / "images" / "train" / "easy" / "shard_00000_of_00002" / "case_step_000.png"
+    image.parent.mkdir(parents=True)
+    image.write_bytes(b"fake")
+    parquet = root / "train" / "easy" / "shard_00000_of_00002" / "train.parquet"
+
+    assert infer_data_root_for_parquet(parquet) == root
+
+
+def test_infer_data_root_for_parquet_shallow_layout(tmp_path):
+    root = tmp_path / "sft_seq"
+    (root / "images" / "train").mkdir(parents=True)
+    parquet = root / "shard_00000_of_00001" / "train.parquet"
+
+    assert infer_data_root_for_parquet(parquet) == root
+
+
+def test_infer_data_root_for_parquet_unknown_layout(tmp_path):
+    parquet = tmp_path / "a" / "b" / "train.parquet"
+
+    assert infer_data_root_for_parquet(parquet) == tmp_path / "a" / "b"
 
 
 @requires_verl_dataset

@@ -37,6 +37,31 @@ def resolve_enable_thinking_values(dataframe: pd.DataFrame, key: str) -> list[bo
     return [False] * len(dataframe)
 
 
+def infer_data_root_for_parquet(parquet_file: str | Path) -> Path:
+    """Infer the data root that relative image paths are anchored to.
+
+    Relative image paths are anchored at the output directory that contains the
+    ``images/`` directory, while the PackLab builder writes parquet shards under
+    ``<out>/<split>/<difficulty>/<shard_...>/train.parquet``. Walk up from the
+    parquet until a directory with an ``images`` sibling is found, so the
+    resolved root matches the images layout instead of the shard's parent.
+    """
+    path = Path(parquet_file)
+    if "train_data_sft" in path.parts:
+        return Path(*path.parts[: path.parts.index("train_data_sft") + 1])
+    current = path.parent
+    for _ in range(len(path.parts)):
+        if (current / "images").is_dir():
+            return current
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
+    if len(path.parents) >= 2 and path.parent.name.startswith("shard_"):
+        return path.parent.parent
+    return path.parent
+
+
 try:
     from verl.utils.dataset.multiturn_sft_dataset import MultiTurnSFTDataset
 except Exception:
@@ -70,12 +95,7 @@ else:
             configured = self.config.get("data_root", None) if hasattr(self, "config") else None
             if configured:
                 return Path(configured)
-            path = Path(parquet_file)
-            if "train_data_sft" in path.parts:
-                return Path(*path.parts[: path.parts.index("train_data_sft") + 1])
-            if len(path.parents) >= 2 and path.parent.name.startswith("shard_"):
-                return path.parent.parent
-            return path.parent
+            return infer_data_root_for_parquet(parquet_file)
 
         def _resolve_dataframe_images(self):
             if self.image_key not in self.dataframe.columns:
