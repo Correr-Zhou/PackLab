@@ -799,12 +799,15 @@ def _draw_gt_overlay(height_rgb, box: dict, container_size: tuple[int, int, int]
     draw = ImageDraw.Draw(image)
     img_w, img_h = image.size
     x_cells, y_cells, _ = container_size
-    sx = img_w / float(x_cells)
-    sy = img_h / float(y_cells)
-    x0 = int(round(box["x"] * sx))
-    y0 = int(round(box["y"] * sy))
-    x1 = int(round((box["x"] + box["dx"]) * sx))
-    y1 = int(round((box["y"] + box["dy"]) * sy))
+    # The height-map image is stored with rows indexed by the x grid and columns by
+    # the y grid, so the x scale maps to image height and the y scale to image width.
+    row_scale = img_h / float(x_cells)
+    col_scale = img_w / float(y_cells)
+    # PIL rectangle takes (left, top, right, bottom) = (col, row, col, row).
+    x0 = int(round(box["y"] * col_scale))
+    y0 = int(round(box["x"] * row_scale))
+    x1 = int(round((box["y"] + box["dy"]) * col_scale))
+    y1 = int(round((box["x"] + box["dx"]) * row_scale))
     draw.rectangle([x0, y0, x1, y1], outline=(255, 255, 0), width=3)
     return image
 
