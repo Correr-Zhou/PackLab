@@ -863,6 +863,11 @@ def rollout_case_with_client(case: dict, cfg, client_fn, visualization_dir: str 
             "raw_invalid_action_count": raw_invalid_action_count,
             "adjustment_count": adjustment_count,
             "total_steps": control.total_steps,
+            "total_object_volume": total_object_volume,
+            "total_object_count": len(sample["object_sequence"]),
+            "out_of_bounds_x_count": raw_out_of_bounds_x_count,
+            "out_of_bounds_y_count": raw_out_of_bounds_y_count,
+            "exceed_height_count": raw_exceed_height_count,
             "termination_reason": termination_reason or env.termination_reason or "completed",
         }
         breakdown = scorer.compute_final_score_with_info(env, stats)
